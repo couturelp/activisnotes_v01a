@@ -1,16 +1,17 @@
 import  { Meteor } from 'meteor/meteor';
 import React  from 'react';
 import { Router, Switch, Route, withRouter } from 'react-router';
-import createHistory from 'history/createBrowserHistory'
 
+import history from './history'
 import Signup from '../ui/Signup';
 import Dashboard from '../ui/Dashboard';
 import NotFound from '../ui/NotFound';
 import Login from '../ui/Login';
+import Reset from '../ui/Reset';
+import RequestReset from '../ui/RequestReset';
 
-const history = createHistory();
 
-const unauthenticatedPages = ['/','/signup'];
+const unauthenticatedPages = ['/','/signup','reset-password','request-reset'];
 const authenticatedPages = ['/dashboard']
 let isUnauthenticatedPage = true;
 let isAuthenticatedPage = false;
@@ -42,6 +43,8 @@ export const routes = (
     <Route exact path="/" component={Login}/>
     <Route path="/signup" component={Signup}/>
     <Route path="/dashboard" component={Dashboard} />
+    <Route path="/request-reset" component={RequestReset} />
+    <Route path="/reset-password/:token" component={Reset} />
     <Route component={NotFound}/>
     </Switch>
     <ChangeTracker/>

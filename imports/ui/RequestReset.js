@@ -2,7 +2,10 @@ import React  from 'react';
 import { Link } from 'react-router-dom';
 import  { Meteor } from 'meteor/meteor';
 
-export default class Login extends React.Component {
+import { withRouter } from "react-router-dom";
+import history from './../routes/history' 
+
+export default class RequestReset extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
@@ -18,29 +21,28 @@ export default class Login extends React.Component {
     e.preventDefault();
     
     let email = this.refs.email.value.trim();
-    let password = this.refs.password.value.trim();
-    Meteor.loginWithPassword({email},password,(err)=>{
-        if (err){
-            this.setState({error: "Unable to login, check email and password."});
-        }else{
-            this.setState({error: ''});
-        }
-    });
-
+    Accounts.forgotPassword({email: email}, function (e, r) {
+      if (e) {
+          console.log(e.reason);
+      } else {
+          console.log("Sent email");
+          history.replace('/');
+      }
+    }); 
   }
+
   render(){
     return (
       <div className="boxed-view">
         <div className="boxed-view__box">
-          <h1>Login</h1>
+          <h1>Forgotten password</h1>
+          <p>Fill in your email below and if it is valid we will send you a link to reset your password.</p>
           {this.state.error ? <p>{this.state.error}</p> : undefined}
           <form onSubmit={this.onSubmit.bind(this)} className="boxed-view__form">
               <input type="email" ref="email" name="email" placeholder="Email"/>
-              <input type="password" ref="password" name="password" placeholder="Password"/>
-              <button className="button">Login</button>
+              <button className="button">Reset</button>
           </form>
-          <p><Link to="/request-reset">Forgot my password</Link></p>
-          <Link to="/signup">Don't have an account ?</Link>
+          <Link to="/">Return to login</Link>
         </div>
       </div>
     );

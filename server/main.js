@@ -5,5 +5,17 @@ import '../imports/api/users';
 import '../imports/startup/simple-schema-conf';
 
 Meteor.startup(() => {
+    Accounts.emailTemplates.resetPassword.text = function (user, url) {
+        url = url.replace('#/', '')
+        return " To reset your password, simply click the link below:\n\n"
+          + url;
+     };
+
+    if(Meteor.isServer) {
+        process.env.MAIL_URL="smtp://account@quantik.ca:***API****@smtp.mandrillapp.com:587/";
+
+        Accounts.emailTemplates.siteName = "ActivisNotes_v01a";
+        Accounts.emailTemplates.from = "ActivisNotes <activisnotes@gmaq.ca>";
+    }
 
 });
